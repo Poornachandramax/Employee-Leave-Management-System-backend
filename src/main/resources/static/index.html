@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LeaveFlow | Employee Leave Management</title><link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<div class="login-wrap" id="loginView">
+  <div class="login-card">
+    <div class="brand-mark">LF</div><p class="eyebrow">PEOPLE OPERATIONS</p>
+    <h1>Welcome back</h1><p class="muted">Sign in to manage your time off.</p>
+    <form id="loginForm">
+      <label>Username<input id="username" required value="employee" autocomplete="username"></label>
+      <label>Password<input id="password" required type="password" value="employee123" autocomplete="current-password"></label>
+      <button class="primary full" type="submit">Sign in <span>→</span></button>
+      <p class="error" id="loginError"></p>
+    </form>
+    <div class="demo-hint"><strong>Demo accounts</strong><br>Employee: employee / employee123<br>Admin: admin / admin123</div>
+  </div>
+</div>
+<div id="appView" class="app hidden">
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark small">LF</span><span>LeaveFlow</span></div>
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav-item active" id="navDashboard">▦ <span>Dashboard</span></button>
+    <button class="nav-item" id="navRequests">▤ <span id="navRequestsText">My leave requests</span></button>
+    <div class="sidebar-bottom"><div class="avatar" id="avatar">E</div><div class="user-mini"><strong id="sideName">Employee</strong><span id="sideRole">Employee</span></div><button class="logout" id="logoutBtn" title="Sign out">↪</button></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><div class="eyebrow">LEAVE MANAGEMENT</div><h2 id="pageTitle">Dashboard</h2></div><div class="top-user"><span class="online-dot"></span><span id="topName">Employee</span></div></header>
+    <section id="employeePanel" class="content hidden">
+      <div class="welcome"><div><p class="eyebrow light">YOUR WORKSPACE</p><h1 id="welcomeName">Good to see you</h1><p>Plan your time off and keep your team in the loop.</p></div><div class="welcome-icon">✦</div></div>
+      <div class="section-head"><div><h3>Leave balance</h3><p class="muted">Available days for the current cycle</p></div><button class="primary" id="showApply">＋ Apply for leave</button></div>
+      <div class="stats">
+        <div class="stat-card"><div class="stat-top"><span>Annual leave</span><span class="stat-icon purple">▤</span></div><div class="stat-number" id="annualBal">12</div><div class="stat-foot">Days available</div><div class="progress"><span id="annualProgress" style="width:100%"></span></div></div>
+        <div class="stat-card"><div class="stat-top"><span>Sick leave</span><span class="stat-icon green">＋</span></div><div class="stat-number" id="sickBal">6</div><div class="stat-foot">Days available</div><div class="progress green-bar"><span id="sickProgress" style="width:100%"></span></div></div>
+        <div class="stat-card"><div class="stat-top"><span>Casual leave</span><span class="stat-icon orange">☼</span></div><div class="stat-number" id="casualBal">6</div><div class="stat-foot">Days available</div><div class="progress orange-bar"><span id="casualProgress" style="width:100%"></span></div></div>
+      </div>
+      <div id="applyCard" class="panel hidden">
+        <div class="panel-heading"><div><h3>Apply for leave</h3><p class="muted">Submit a new time-off request</p></div><button class="icon-button" id="closeApply">×</button></div>
+        <form id="leaveForm" class="leave-form">
+          <label>Leave type<select id="leaveType" required><option value="ANNUAL">Annual leave</option><option value="SICK">Sick leave</option><option value="CASUAL">Casual leave</option></select></label>
+          <label>Start date<input type="date" id="startDate" required></label>
+          <label>End date<input type="date" id="endDate" required></label>
+          <label class="wide">Reason<textarea id="reason" required rows="3" placeholder="Briefly explain your request..."></textarea></label>
+          <div class="wide form-actions"><p class="error" id="leaveError"></p><button class="primary" type="submit">Submit request →</button></div>
+        </form>
+      </div>
+      <div class="panel">
+        <div class="panel-heading"><div><h3>Recent requests</h3><p class="muted">Track the status of your time off</p></div><select id="employeeFilter" class="small-select"><option value="ALL">All requests</option><option>PENDING</option><option>APPROVED</option><option>REJECTED</option></select></div>
+        <div class="table-wrap"><table><thead><tr><th>TYPE</th><th>DATES</th><th>DAYS</th><th>STATUS</th><th>REASON</th></tr></thead><tbody id="employeeRows"></tbody></table></div>
+      </div>
+    </section>
+    <section id="adminPanel" class="content hidden">
+      <div class="welcome"><div><p class="eyebrow light">ADMINISTRATION</p><h1>Team leave overview</h1><p>Review requests and keep leave operations moving.</p></div><div class="welcome-icon">✦</div></div>
+      <div class="stats admin-stats">
+        <div class="stat-card"><div class="stat-top"><span>Total requests</span><span class="stat-icon purple">▤</span></div><div class="stat-number" id="totalCount">0</div><div class="stat-foot">All submitted requests</div></div>
+        <div class="stat-card"><div class="stat-top"><span>Pending review</span><span class="stat-icon orange">◷</span></div><div class="stat-number" id="pendingCount">0</div><div class="stat-foot">Need your attention</div></div>
+        <div class="stat-card"><div class="stat-top"><span>Approved</span><span class="stat-icon green">✓</span></div><div class="stat-number" id="approvedCount">0</div><div class="stat-foot">Requests approved</div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-heading"><div><h3>Leave requests</h3><p class="muted">Review and manage employee applications</p></div><select id="adminFilter" class="small-select"><option value="ALL">All statuses</option><option>PENDING</option><option>APPROVED</option><option>REJECTED</option></select></div>
+        <div class="table-wrap"><table><thead><tr><th>EMPLOYEE</th><th>LEAVE TYPE</th><th>DATES</th><th>DAYS</th><th>STATUS</th><th>REASON</th><th>ACTION</th></tr></thead><tbody id="adminRows"></tbody></table></div>
+      </div>
+    </section>
+    <div class="toast hidden" id="toast"></div>
+    <footer>LeaveFlow <span>·</span> Employee Leave Management System</footer>
+  </main>
+</div>
+<script src="/app.js"></script>
+</body></html>
